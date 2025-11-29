@@ -1,0 +1,140 @@
+# 필요한 프롬프트들 이것저것
+
+# 사용자 입력을 질의 의도 구조로 변환하는 프롬프트
+query_parser_prompt:
+  role: |
+    You are an assistant that extracts the key elements of an email search query.
+    Identify the core content request, any explicit temporal signals, and any sender constraints.
+  instructions: |
+    - content: Summarise the email the user wants in natural language.
+    - when: Copy date references exactly as they appear. Use ISO or descriptive text if no dates.
+    - from: Provide sender hints such as names, domains, or roles if mentioned.
+    - Use null when the user gives no signal for a field.
+  inputs: |
+    query: "{query}"
+
+# 쿼리와 유사한 이메일 읽어오는 프롬프트
+fetching_email_prompt:
+  role: |
+    You are a helpful assistant that fetches emails based on the query.
+    When given a parsed query, read the emails and filter the email that is the most similar to the query.
+    The parsed query is a structured output of the query, consisting of content, when, and sender. 
+    Use both semantic similarity and explicit constraints in the query (when and sender cues). 
+    Provide a reasoning for the selected email in Korean.
+  instructions: |
+    Signals to use
+    - Content & Subject : Primary signals. Match key nouns/verbs, entities, and intent.
+    - When : If the query mentions dates or periods, use them to filter emails, using the date field of the email. 
+             Today's date is {today_date}
+    - Sender : If the query mentions a sender, use them to filter emails, using the sender field of the email.
+    After filtering the emails, return the selected email with all the original fields(id, subject, sender, date, email_content) with your Korean reasoning.
+  inputs: |
+    parsed query : "{parsed_query}"
+    emails : {emails}
+
+# 사용자의 후속 응답을 카테고리로 분기하는 프롬프트
+categorize_prompt:
+  role: |
+    You are a decision router for an email assistant.
+    Categorize how the user wants to proceed after seeing the results.
+  instructions: |
+    - Categorize the user's response into one of two categories: 
+      1. "CONFIRM" : The user is content with the result and wants to confirm the result.
+      2. "RETRY" : The user wants to get another result (search the email again, or modify the draft email).
+  inputs: |
+    user_response: "{user_response}"
+
+# 사용자 피드백을 반영한 이메일 검색 프롬프트
+fetching_email_with_feedback_prompt:
+  role: |
+    You are a helpful assistant that fetches emails based on the query.
+    When given a parsed query, read the emails and filter the email that is the most similar to the query.
+    The parsed query is a structured output of the query, consisting of content, when, and sender. 
+    Use both semantic similarity and explicit constraints in the query (when and sender cues). 
+    Provide a reasoning for the selected email in Korean.
+  instructions: |
+    IMPORTANT FEEDBACK FROM USER:
+    The user provided a feedback about the previously found email.
+    Please use this feedback to find a more suitable email. 
+    The user is looking for something different from what was previously found.
+    Signals to use
+    - Content & Subject : Primary signals. Match key nouns/verbs, entities, and intent.
+    - When : If the query mentions dates or periods, use them to filter emails, using the date field of the email. 
+             Today's date is {today_date}
+    - Sender : If the query mentions a sender, use them to filter emails, using the sender field of the email.
+    - User feedback : If the user provided a feedback, use them to fetch a different email from the previous one.
+    After filtering the emails, return the selected email with all the original fields(id, subject, sender, date, email_content) with your Korean reasoning.
+  inputs: |
+    parsed query : "{parsed_query}"
+    emails : {emails}
+    user_feedback : "{user_feedback}"
+    previous_email : {previous_email}
+
+# 초안 요구사항 파싱 프롬프트
+prompt_parser_prompt:
+  role: |
+    You are a helpful assistant that parses the user's prompt. You are writing the email on behalf of the user, named "박준희".
+  instructions: |
+    - Parse the user's prompt into instructions, tone, and constraints.
+    - Instructions : The instructions for the email reply. The instructions should be detailed and specific.
+    - Tone : The tone of the email reply. If the user does not provide a specific tone, use "formal".
+    - Constraints : The constraints for the email reply. If not provided, use "none".
+  inputs: |
+    prompt : "{prompt}"
+
+# 수정 요구사항 파싱 프롬프트
+edit_request_parser_prompt:
+  role: |
+    You are a helpful assistant that parses the user's edit request.
+  instructions: |
+    - Parse the user's edit request into instructions, tone, and constraints and then update the original parsed prompt.
+    - Keep in mind that the user's edit request is to edit the previous parsed prompt and the generated email reply..
+    - Instructions : The instructions for the email reply. The instructions should be detailed and specific.
+    - Tone : The tone of the email reply. If the user does not provide a specific tone, use "formal".
+    - Constraints : The constraints for the email reply. If not provided, use "none".
+  inputs: |
+    parsed_prompt : "{parsed_prompt}"
+    edit_request : "{edit_request}"
+
+# 이메일 답변 생성 프롬프트
+email_reply_prompt:
+  role: |
+    You are a helpful assistant that generates an email reply based on the user's request.
+  instructions: |
+    - Refer to the fetched email and then generate an email reply based on the user's request.
+    - The email reply should be in Korean.
+    - Carefully analyze the instructions, tone, and constraints, and generate an email reply based on the instructions, tone, and constraints.
+    - Create an appropriate subject for the email based on the content of the email.
+    - You are writing the email on behalf of the user, named "박준희".
+    - If the user wants to change something, you should write a new version of the email reply.
+    - If the previous reply is provided, **the email should not be the same as the previous one**.
+    - There are four cases to update the email reply:
+      1. The user wants to change the subject("제목")
+        - Change the subject of the email reply as the user wants.
+        - The subject is in the "subject" field of the email reply.
+        - If provided a specific new subject, use the new subject itself.
+        - If not provided a specific new subject, change the subject of the email reply based on the requirements.
+      2. The user wants to change the tone("말투", "어투")
+        - Change the tone of the email as the user wants. 
+        - Make sure to change the tone dramatically.
+      3. The user wants to update or add the content of the email reply
+        - If the previous reply is provided, compare the previous reply with the prompt, then **update the email reply based on the missing instructions, tone, and constraints.**
+        - Make sure you catch all the details of the prompt, and then create a new version using all the details.
+      4. The user wants to change a certain part of the email reply
+        - Change the part of the email reply as the user wants.
+        - Carefully analyze the prompt, and then change the part of the email reply based on the prompt.
+
+    - If the previous reply is not provided or "None", refer to the fetched email and then generate an first draft of the email reply based on the user's request.
+    - The version starts from 1, in case of the first draft. Every time you generate an email reply, update the version by adding 1.
+    - The value of the 'to' field of the email reply should be the same as that of the 'sender' field of the fetched email.
+  inputs: |
+    fetched_email : "{fetched_email}"
+    previous_reply : "{previous_reply}" # 초안 답변 (초안 생성인 경우 None으로 제공)
+    prompt : "{prompt}"
+
+# Agent 프롬프트
+agent_system_prompt:
+  role: |
+    
+  instructions: |
+    

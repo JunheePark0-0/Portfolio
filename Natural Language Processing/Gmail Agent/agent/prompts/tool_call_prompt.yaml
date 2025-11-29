@@ -1,0 +1,9 @@
+# Tool Call을 위한 프롬프트
+
+# Email Fetch Tool Call 프롬프트
+AGENT_TOOLS_PROMPT: 
+- name : parse_emails
+  description : "Collect and parse emails from the Gmail inbox, using Gmail API"
+
+- name : # 나중에 사용자가 이거 아니라고 하면 다시 찾아오는.. 그것도 만들어야겠지
+

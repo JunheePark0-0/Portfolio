@@ -1,0 +1,22 @@
+# gmail api
+
+1. api_test.py
+- credentials.json을 가지고 있는 상황에서
+-> gmail api에 권한 부여, token.json 파일 생성
+-> token.json 파일을 이용해 gmail api에 접근해서
+-> 메일 창에 있는 Labels 목록 가져와줌
+Labels : CHAT SENT INBOX IMPORTANT TRASH DRAFT SPAM ... YELLOW_STAR UNREAD 등등
+- INBOX : 전체보관함 
+
+2. get_emails.py
+- 특정 항목이 label을 함께 입력하면
+-> 그 label에 해당하는 메일들을 가져와줌
+-> python3 2_get_emails.py YELLOW_STAR 로 실행
+
+- 가져온 이메일들에 대해 정리하는 함수를 추가함
+-> parse_emails
+
+3. send_emails.py
+- 메일 보낼 곳, 제목이랑 내용 입력하면
+-> 메일을 보내준당
+-> python3 3_send_emails.py "이메일주소" "제목" "내용" 으로 실행
