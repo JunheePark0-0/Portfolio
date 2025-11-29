@@ -13,15 +13,16 @@
 
 | 기간 | 프로젝트 / 활동 | 주요 역할 | 성과 |
 |:---:|:---|:---|:---|
-| **Current** | **Stock Market Agent** | 뉴스/공시 크롤링, LangGraph 기반 브리핑 에이전트 개발 | (진행 중) 미국 장 마감 브리핑 자동화 |
-| 2024.11.22 ~ 2024.11.23 | **MixUP (고문헌 현대화)** | RAG 기반 번역 실험, Multi-turn 프롬프트 전략 수립 | **최우수상 수상**, 고문헌 번역 성능 최적화 |
-| 2024.11.18 ~ 2024.11.30 | **Vision Map (청소년 데이터 공모전)** | 상담 챗봇용 데이터 전처리 및 T5 모델 Fine-tuning | 진로 상담 챗봇 프로토타입 개발 |
+| 2025.10 ~ Current | **Stock Market Agent** | 뉴스/공시 크롤링, LangGraph 기반 브리핑 에이전트 개발 | (진행 중) 미국 장 마감 브리핑 자동화 |
+| 2025.10 ~ 2025.10 | **Gmail Agent** | LangGraph 기반 멀티 에이전트 워크플로우 설계 | 이메일 비서 에이전트 프로토타입 개발 |
+| 2025.11.22 ~ 2025.11.23 | **MixUP (고문헌 현대화)** | RAG 기반 번역 실험, Multi-turn 프롬프트 전략 수립 | **최우수상 수상**, 고문헌 번역 성능 최적화 |
+| 2025.07 ~ 2025.08 | **LG Aimers 7기** | 시계열 Feature Engineering, LSTM 수요 예측 모델링 | 복잡한 시계열 패턴 학습 모델 구현 |
+| 2025.03 ~ 2025.06 | **Sherlock Holes** | 포트홀 예측 모델링(XGBoost), XAI 분석, 웹 서비스 | **장려상 수상**, 도로 위험도 예측 서비스 |
+| 2025.05 ~ 2025.05 | **Spine X-ray Analysis** | YOLOv8 기반 척추뼈 탐지 및 질환 분류 파이프라인 구축 | 척추 질환 진단 보조 시스템 개발 |
+| 2025.02 ~ 2025.02 | **CAT-FICIAL DECODER** | ViT + GPT-2 결합 Image Captioning 모델 구현 | 이미지의 문맥을 이해하는 캡셔닝 모델 개발 |
+| 2024.11 ~ 2024.11 | **Vision Map (청소년 데이터 공모전)** | 상담 챗봇용 데이터 전처리 및 T5 모델 Fine-tuning | 진로 상담 챗봇 프로토타입 개발 |
 | 2024.09 ~ 2024.12 | **#오늘 #듣기 #좋은 #노래** | 멜론 크롤링 최적화, LLM 태깅, 임베딩(Word2Vec) 추천 | 일기 기반 맞춤형 노래 추천 시스템 구현 |
 | 2024.07 ~ 2024.10 | **FSI AIxData Challenge** | 금융 도메인 NER 튜닝, 숫자 마스킹 로직 개발 | **최우수상 수상**, 개인정보 비식별화 모델 구축 |
-| 2024.07 ~ 2024.08 | **LG Aimers 7기** | 시계열 Feature Engineering, LSTM 수요 예측 모델링 | 복잡한 시계열 패턴 학습 모델 구현 |
-| 2024.05 ~ 2024.06 | **Sherlock Holes** | 포트홀 예측 모델링(XGBoost), XAI 분석, 웹 서비스 | **장려상 수상**, 도로 위험도 예측 서비스 |
-| 2024.04 ~ 2024.05 | **Spine X-ray Analysis** | YOLOv8 기반 척추뼈 탐지 및 질환 분류 파이프라인 구축 | 척추 질환 진단 보조 시스템 개발 |
-| 2024.03 ~ 2024.04 | **CAT-FICIAL DECODER** | ViT + GPT-2 결합 Image Captioning 모델 구현 | 이미지의 문맥을 이해하는 캡셔닝 모델 개발 |
 
 ---
 
@@ -70,7 +71,7 @@
 #### 1. [Sherlock Holes](Machine%20Learning/Sherlock%20Holes/README.md) 🏆
 - **주제**: 서울시 포트홀 발생 위험 지역 예측 및 XAI 기반 원인 분석
 - **Tech**: `XGBoost`, `SHAP`, `DiCE`, `Streamlit`, `Geocoding`
-- **My Role**: 데이터 전처리(SMOTE, 지오코딩), 예측 모델링, 웹 서비스(Streamlit) 구현
+- **My Role**: 데이터 전처리(SMOTE, 지오코딩), 예측 모델링, 위험 평가 리포트 작성, 웹 서비스(Streamlit) 구현
 - **성과**: **장려상 수상**
 
 #### 2. [LG Aimers 7기](Machine%20Learning/LG%20Aimers%207기/README.md)
@@ -95,6 +96,6 @@
 ---
 
 ## 🛠️ Skills
-- **Languages**: Python, SQL
-- **AI/ML**: PyTorch, TensorFlow, Scikit-learn, XGBoost, LangChain, LangGraph, Hugging Face
+- **Languages**: Python, R, SQL
+- **AI/ML**: PyTorch, Scikit-learn, LangChain, LangGraph, Hugging Face
 - **Data & Etc**: Pandas, NumPy, Selenium, BeautifulSoup, Streamlit, SQLite, Git
