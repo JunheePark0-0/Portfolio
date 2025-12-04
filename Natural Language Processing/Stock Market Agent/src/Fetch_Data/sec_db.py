@@ -11,7 +11,7 @@ from datetime import datetime
 
 class SEC_Database:
     """SEC 공시 및 뉴스 자료를 저장하는 데이터베이스 클래스"""
-    def __init__(self, db_path: str = "sec_filings.db"):
+    def __init__(self, db_path: str = "data/SEC/sec_filings.db"):
         """
         Args:
             db_path: SQLite 데이터베이스 파일 경로

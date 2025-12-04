@@ -1,11 +1,11 @@
 """
-Write Briefing Agent
+뉴스 크롤링 후 브리핑 작성하는 에이전트 (단일 에이전트)
 """
 from langgraph.prebuilt import create_react_agent
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
-from src.Agent.tools.news_tools import search_news_headlines, read_news_content
-from src.Agent.tools.functions import load_prompts
+from src.Single_Agent.tools.news_tools import search_news_headlines, read_news_content
+from src.Single_Agent.tools.functions import load_prompts
 import argparse
 
 from dotenv import load_dotenv, find_dotenv
@@ -19,7 +19,7 @@ system_prompt = system_prompt_org["role"] + "\n\n" + system_prompt_org["instruct
 agent_executor = create_react_agent(llm, tools)
 
 def run_agent(ticker):
-    print(f"--- Write Briefing Agent 시작 ({ticker}) ---")
+    print(f"--- Single Agent 시작 ({ticker}) ---")
 
     inputs = {
         "messages" : [

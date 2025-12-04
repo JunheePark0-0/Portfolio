@@ -11,7 +11,7 @@ from typing import Dict, Optional, Tuple, List
 
 import requests, os
 
-from src.Crawling.sec_db import SEC_Database
+from src.Fetch_Data.sec_db import SEC_Database
 from src.utils.time_utils import KST, get_last_24h_window, parse_iso_datetime
 
 from dotenv import load_dotenv
@@ -189,7 +189,7 @@ class SEC_Crawler:
         filings = self.get_filings_in_window(cik, only_today)
         return filings[0] if filings else None
     
-    def download_filing_file(self, cik: str, accession_number: str, form: str, file_format: str = "xml") -> Optional[Path]:
+    def download_filing_file(self, ticker: str, cik: str, accession_number: str, form: str, file_format: str = "xml") -> Optional[Path]:
         """
         공시 문서 파일을 다운로드합니다.
         """
@@ -201,7 +201,6 @@ class SEC_Crawler:
             target_cik = str(int(cik)) 
 
             # 2. index.json 확인
-            # (여기는 잘 작성하셨습니다. target_cik 사용됨)
             index_url = f"{self.BASE_URL}/Archives/edgar/data/{target_cik}/{accession_no_dash}/index.json"
             response = self.session.get(index_url)
             
@@ -238,19 +237,19 @@ class SEC_Crawler:
             
             # 4. 파일 다운로드 시도
             downloaded_file = None
-            download_dir = Path("downloads/sec_filings")
+            download_dir = Path("data/SEC/sec_filings")
             download_dir.mkdir(parents=True, exist_ok=True)
 
             for filename in file_priorities:
                 try:
-                    # ★★★ 여기가 핵심 수정 포인트입니다! ★★★
-                    # cik 대신 target_cik를 사용해야 합니다.
                     file_url = f"{self.BASE_URL}/Archives/edgar/data/{target_cik}/{accession_no_dash}/{filename}"
                     
                     file_resp = self.session.get(file_url)
                     if file_resp.status_code == 200:
-                        file_path = download_dir / f"{cik}_{accession_no_dash}_{filename}"
-                        file_path.write_bytes(file_resp.content)
+                        file_path = download_dir / f"{ticker}" / f"{cik}_{accession_no_dash}_{filename}"
+                        file_path.parent.mkdir(parents=True, exist_ok=True)
+                        with open(file_path, "wb") as f:
+                            f.write(file_resp.content)
                         
                         print(f"파일 다운로드 완료: {file_path} ({file_format.upper()} 형식)")
                         downloaded_file = file_path
@@ -288,6 +287,7 @@ class SEC_Crawler:
 
         for filing_info in filing_infos:
             file_path = self.download_filing_file(
+                ticker=ticker,
                 cik=cik,
                 accession_number=filing_info["accession_number"],
                 form=filing_info["form"],
@@ -340,13 +340,15 @@ def main():
     crawler = SEC_Crawler()
     
     # NVIDIA 티커로 테스트
-    result = crawler.crawl_latest_filing("NVDA")
+    result = crawler.crawl_filings_in_window("TSLA", only_today = False)
     
     if result:
-        metadata, file_path = result
+        # metadata, file_path = result
         print("\n=== 크롤링 완료 ===")
-        print(f"메타데이터: {metadata}")
-        print(f"파일 경로: {file_path}")
+        print(f"결과 : {len(result)}개")
+        for metadata, file_path in result:
+            print(f"메타데이터: {metadata}")
+            print(f"파일 경로: {file_path}")
     else:
         print("크롤링 실패")
 
